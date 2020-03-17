@@ -1,0 +1,125 @@
+* {
+  margin: 0;
+  padding: 0;
+  --backgroundColor: rgba(30, 61, 74, 1);
+}
+
+body {
+  background: var(--backgroundColor);
+  width: 100%;
+}
+
+.App {
+  text-align: center;
+
+}
+
+.App-logo {
+  height: 40vmin;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #09d3ac;
+}
+
+
+/* 自定义 */
+
+/* 页面 */
+.page.header {
+  width: 98%;
+  height: 60px;
+  margin: 0px auto;
+}
+.page.display, .page.hidden { 
+  position: absolute;
+  top: 70px;
+  width: 98%;
+  left: 0; 
+  right: 0;
+  margin: auto;
+}
+.page.hidden {
+  opacity: 0;
+  transition: opacity 1s ease;
+  /*display: none;*/
+}
+.page.display {
+  opacity: 1;
+  transition: opacity 1s ease;
+}
+
+/*
+  按钮
+*/
+/* 页头按钮 */
+.header-btn {
+  display: block;
+  text-align: center;
+  width: 100%;
+  margin: 5px;
+  margin-top: 20px;
+  font-size: 30px;
+  border-radius: 2px;
+  color: white;
+  background: rgba(30, 61, 80, 1);
+  transition: all 0.4s;
+}
+.header-btn.focus {
+  background: red;
+}
+
+/* 页内按钮 */
+.page-btn {
+  border-radius: 3px;
+  display: block;
+  text-align: center;
+  width: 100%;
+  font-size: 30px;
+  color: white;
+  border: 1px solid blue;
+  background: rgba(30, 61, 80, 1);
+  transition: all 0.3s;
+}
+.page-btn.focus {
+  cursor: pointer;
+  color: red;
+  border: 1px solid red;
+}
+
+/* 
+  卡片效果
+*/
+.ant-row {
+  margin-left: -8px !important;
+  margin-right: -8px !important;
+  margin-bottom: 25px !important;
+}
+
+.ant-card {
+  border-radius: 5px;
+  border: 3px solid var(--backgroundColor);
+}
+.ant-card.focus {
+  border: 3px solid red;
+  transform: scale(1.05);
+}
+
+.ant-card-meta-detail {
+  text-align: center;
+}
+
+.ant-card-meta-title {
+  margin-bottom: 0 !important;
+}
