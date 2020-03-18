@@ -5,12 +5,15 @@
   "private": false,
   "dependencies": {
     "antd": "^3.26.6",
+    "axios": "0.19.2",
     "babel-plugin-import": "^1.13.0",
     "customize-cra": "^0.9.1",
+    "http-proxy-middleware": "^1.0.1",
     "postcss-pxtorem": "^5.1.1",
     "react": "^16.13.0",
     "react-app-rewired": "^2.1.5",
     "react-dom": "^16.13.0",
+    "react-lazyload": "^2.6.5",
     "react-scripts": "3.4.0"
   },
   "scripts": {

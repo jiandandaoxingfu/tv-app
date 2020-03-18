@@ -3,19 +3,22 @@ import { Row, Col } from 'antd';
 
 class ButtonRow extends React.Component {
     render() {
+        let data = this.props.data;
+        
         return (
-            <Row gutter={ this.props.gutter } id={ `page-${this.props.data[0].PageId}-row-${this.props.data[0].RowId}` }>
+            <Row gutter={ data.gutter } id={ `page-${data.PageId}-row-${data.RowId}` }>
             { 
-                this.props.data.map( (item, index) => 
-                    <Col className="gutter-row" span={ item.span }>
+                data.value.map( (value, index) => 
+                    <Col className="gutter-row" span={ data.span }>
                         <div
-                            className={this.props.btnClass}
-                            id={ `page-${item.PageId}-row-${item.RowId}-btn-${index+1}` }
+                            onClick={ data.onclick || function() {} }
+                            className={data.btnClass}
+                            id={ `page-${data.PageId}-row-${data.RowId}-btn-${index+1}` }
                         >
-                            { item.value }
+                            { value }
                         </div>
                     </Col>
-                )  
+                ) 
             }
             </Row>
         );

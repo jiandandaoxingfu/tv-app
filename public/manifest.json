@@ -1,6 +1,7 @@
 {
   "short_name": "React App",
   "name": "Create React App Sample",
+  "adb": "D:/HBuilderX/update/patch/plugins/launcher/tools/adbs/1.0.36",
   "icons": [
     {
       "src": "favicon.ico",

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Row, Col, Card  } from 'antd';
+import Lazyload from 'react-lazyload';
 
 const { Meta } = Card;
 const img_style = { 'height': '250px' };
@@ -7,18 +8,26 @@ const card_body_style = { padding: '5px 10px'};
 
 class CardRow extends React.Component {
     render() {
+        let data = this.props.data;
+        let extra_index = data.value.length % (24 / data.span);
+        let value = data.value.slice(0, -extra_index);
         return (
-            <Row gutter={this.props.gutter} id={ `page-${this.props.data[0].PageId}-row-${this.props.data[0].RowId}` }>
+            <Row gutter={data.gutter} id={ `page-${data.PageId}-row-${data.RowId}` }>
             { 
-                this.props.data.map( (item, index) => 
-                    <Col className="gutter-row" span={ item.span }>
+                value.map( (item, index) =>
+                    <Col className="gutter-row" span={ data.span }>
                         <Card
-                            id={ `page-${item.PageId}-row-${item.RowId}-card-${index+1}` }
+                            id={ `page-${data.PageId}-row-${data.RowId}-card-${index+1}` }
+                            name={ item.video_src }
                             style={ { width: '100%' } }
                             bodyStyle={ card_body_style }
-                            cover={<img style={ img_style } src={ item.src } alt="图片无法加载"/>}
+                            cover={ 
+                                <Lazyload throttle={300} height={250}>
+                                    <img style={ img_style } src={ item.image_src } alt="图片无法加载"/>
+                                </Lazyload>
+                            }
                         >
-                            <Meta title={ item.title } description={ item.description } />
+                            <Meta title={ item.title.slice(0, 3) } description={ item.description.slice(0, 3) } />
                         </Card>
                     </Col>
                 ) 
