@@ -75,7 +75,7 @@ var keyController = {
             changeClass.add(preEle, 'focus');
             if( this.PageId == 0 ) {
                 preEle.click();
-                changePage(this.eleId - 1);
+                // changePage(this.eleId - 1);
             }
         }
     },
@@ -129,7 +129,7 @@ var keyController = {
             changeClass.add(nextEle, 'focus');
             if( this.PageId == 0 ) {
                 nextEle.click();
-                changePage(this.eleId + 1);
+                // changePage(this.eleId + 1);
             }
         }
     }, 
@@ -179,10 +179,10 @@ var keyController = {
     }
 }
 
-// 页面切换
-function changePage(PageId) {
-    let lastPage = document.querySelector('.page.display');
-    let nowPage = selector.Page(PageId);
-    lastPage.setAttribute('class', 'page hidden');
-    nowPage.setAttribute('class', 'page display');
-}
+// 页面切换：在更新state值时已经更新。
+// function changePage(PageId) {
+//     let lastPage = document.querySelector('.page.display');
+//     let nowPage = selector.Page(PageId);
+//     lastPage.setAttribute('class', 'page hidden');
+//     nowPage.setAttribute('class', 'page display');
+// }

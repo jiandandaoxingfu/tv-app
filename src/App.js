@@ -10,6 +10,10 @@ class App extends React.Component {
     getData = function(page, pageId, i) {
         if( i === 0 ) {
             page.hasRenderer = !0;
+            let tmp = {};
+            tmp[pageId] = page;
+            this.setState(tmp);
+            console.log(this.state);
             return
         }
         let n = page.children.length;
@@ -31,9 +35,22 @@ class App extends React.Component {
     }
 
     requestData = function() {
+        // 首先更新页面的类值
         let pageId = parseInt( document.querySelector('.header').querySelector('.focus').id.match(/btn-(\d+)/)[1] );
         pageId = 'page' + pageId;
+        let prePageId = document.querySelector('.display').id.replace('-', '');
+        if( pageId === prePageId ) return;
+
         let page = this.state[pageId];
+        page.className = "page display";
+        let prePage = this.state[prePageId];
+        prePage.className = "page hidden";
+        let tmp = {};
+        tmp[prePageId] = prePage;
+        tmp[pageId] = page;
+        this.setState(tmp);
+        console.log(tmp);
+
         if( !page.hasRenderer ) {
             let n = page.children.length;
             this.getData(page, pageId, n);
@@ -61,7 +78,7 @@ class App extends React.Component {
             className: 'page display',
             children: [{
                 type: 'divider',
-                text: 'page-1-2020'
+                text: '2020'
             }, {
                 type: 'card',
                 description: '2020年韩剧',
@@ -75,7 +92,7 @@ class App extends React.Component {
                 }
             }, {
                 type: 'divider',
-                text: 'page-1-2019'
+                text: '2019'
             }, {
                 type: 'card',
                 description: '2019年韩剧',
@@ -89,7 +106,7 @@ class App extends React.Component {
                 }
             }, {
                 type: 'divider',
-                text: 'page-1-2018'
+                text: '2018'
             }, {
                 type: 'card',
                 description: '2018年韩剧',
@@ -103,7 +120,7 @@ class App extends React.Component {
                 }
             }, {
                 type: 'divider',
-                text: 'page-1-2017'
+                text: '2017'
             }, {
                 type: 'card',
                 description: '2017年韩剧',
@@ -122,11 +139,11 @@ class App extends React.Component {
             className: 'page hidden',
             children: [{
                 type: 'divider',
-                text: 'page-2-科幻动作'
+                text: '科幻动作'
             }, {
                 type: 'card',
                 description: '美剧科幻动作',
-                url: '/meiju22/new/Mlist/Mju13.html',
+                url: '/hanjutv/v_all/list-catid-7-year-2017.html',
                 data: {
                     gutter: [24, 32],
                     PageId: 2,
@@ -136,11 +153,11 @@ class App extends React.Component {
                 }
             }, {
                 type: 'divider',
-                text: 'page-2-悬疑烧脑'
+                text: '悬疑烧脑'
             }, {
                 type: 'card',
                 description: '美剧悬疑烧脑',
-                url: '/meiju22/new/Mlist/Mju14.html',
+                url: '/hanjutv/v_all/list-catid-7-year-2017.html',
                 data: {
                     gutter: [24, 32],
                     PageId: 2,
@@ -150,11 +167,11 @@ class App extends React.Component {
                 }
             }, {
                 type: 'divider',
-                text: 'page-2-喜剧青春'
+                text: '喜剧青春'
             }, {
                 type: 'card',
                 description: '美剧喜剧青春',
-                url: '/meiju22/new/Mlist/Mju15.html',
+                url: '/hanjutv/v_all/list-catid-7-year-2017.html',
                 data: {
                     gutter: [24, 32],
                     PageId: 2,
@@ -164,11 +181,11 @@ class App extends React.Component {
                 }
             }, {
                 type: 'divider',
-                text: 'page-2-动漫卡通'
+                text: '动漫卡通'
             }, {
                 type: 'card',
                 description: '美剧动漫卡通',
-                url: '/meiju22/new/Mlist/Mju3.html',
+                url: '/hanjutv/v_all/list-catid-7-year-2017.html',
                 data: {
                     gutter: [24, 32],
                     PageId: 2,
