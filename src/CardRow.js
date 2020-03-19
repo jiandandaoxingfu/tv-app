@@ -22,7 +22,7 @@ class CardRow extends React.Component {
                             style={ { width: '100%' } }
                             bodyStyle={ card_body_style }
                             cover={ 
-                                <Lazyload throttle={300} height={250}>
+                                <Lazyload height={250}>
                                     <img style={ img_style } src={ item.image_src } alt="图片无法加载"/>
                                 </Lazyload>
                             }

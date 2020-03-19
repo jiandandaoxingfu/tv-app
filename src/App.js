@@ -6,26 +6,44 @@ import { Divider } from 'antd';
 import format from './Format.js';
 import axios from 'axios';
 
+window.axios = axios;
+
 class App extends React.Component {
-    getData = function(page, pageId, i) {
+    getData(page, pageId, i) {
         if( i === 0 ) {
             page.hasRenderer = !0;
             let tmp = {};
             tmp[pageId] = page;
+            // this.setState(function(state) {
+            //     delete state[pageId]
+            //     return state;
+            // })
+            // this.setState(function (state) {
+            //     state[pageId] = page;
+            //     return state;
+            // });
             this.setState(tmp);
             console.log(this.state);
             return
         }
         let n = page.children.length;
         let child = page.children[n-i];
-        if( child.type === 'card' ) {
+        if( child.type === 'card' && child.data.value.length === 0 ) {
             let site = child.url.split('/')[1];
-            console.log([n-i, child.url]);
             axios.get(child.url).then( res => {
-                console.log('success');
+                console.log([n-i, child.url, 'success']);
                 child.data.value = format[site](res.data);
                 let tmp = {};
                 tmp[pageId] = page;
+                // this.setState(function(state) {
+                //     delete state[pageId]
+                //     return state;
+                // })
+                // this.setState(function (state) {
+                //     state[pageId] = page;
+                //     this.getData(page, pageId, i-1);
+                //     return state;
+                // })
                 this.setState(tmp);
                 this.getData(page, pageId, i-1);
             })
@@ -34,7 +52,7 @@ class App extends React.Component {
         }
     }
 
-    requestData = function() {
+    requestData() {
         // 首先更新页面的类值
         let pageId = parseInt( document.querySelector('.header').querySelector('.focus').id.match(/btn-(\d+)/)[1] );
         pageId = 'page' + pageId;
@@ -49,7 +67,6 @@ class App extends React.Component {
         tmp[prePageId] = prePage;
         tmp[pageId] = page;
         this.setState(tmp);
-        console.log(tmp);
 
         if( !page.hasRenderer ) {
             let n = page.children.length;
@@ -59,6 +76,7 @@ class App extends React.Component {
 
     state = {
         page0: {
+            id: 0,
             className: 'page header',
             children: [{
                 type: 'button',
@@ -74,6 +92,7 @@ class App extends React.Component {
             }]
         }, 
         page1: {
+            id: 1,
             hasRenderer: !1,
             className: 'page display',
             children: [{
@@ -82,6 +101,7 @@ class App extends React.Component {
             }, {
                 type: 'card',
                 description: '2020年韩剧',
+                // url: 'https://www.hanjutv.com/v_all/list-catid-7-year-2020.html',
                 url: '/hanjutv/v_all/list-catid-7-year-2020.html',
                 data: {
                     gutter: [24, 32],
@@ -96,6 +116,7 @@ class App extends React.Component {
             }, {
                 type: 'card',
                 description: '2019年韩剧',
+                // url: 'https://www.hanjutv.com/v_all/list-catid-7-year-2019.html',
                 url: '/hanjutv/v_all/list-catid-7-year-2019.html',
                 data: {
                     gutter: [24, 32],
@@ -110,6 +131,7 @@ class App extends React.Component {
             }, {
                 type: 'card',
                 description: '2018年韩剧',
+                // url: 'https://www.hanjutv.com/v_all/list-catid-7-year-2018.html',
                 url: '/hanjutv/v_all/list-catid-7-year-2018.html',
                 data: {
                     gutter: [24, 32],
@@ -124,6 +146,7 @@ class App extends React.Component {
             }, {
                 type: 'card',
                 description: '2017年韩剧',
+                // url: 'https://www.hanjutv.com/v_all/list-catid-7-year-2017.html',
                 url: '/hanjutv/v_all/list-catid-7-year-2017.html',
                 data: {
                     gutter: [24, 32],
@@ -135,6 +158,7 @@ class App extends React.Component {
             }]
         }, 
         page2: {
+            id: 2,
             hasRenderer: !1,
             className: 'page hidden',
             children: [{
@@ -143,7 +167,8 @@ class App extends React.Component {
             }, {
                 type: 'card',
                 description: '美剧科幻动作',
-                url: '/hanjutv/v_all/list-catid-7-year-2017.html',
+                // url: 'https://www.meiju22.com/new/Mlist/Mju13.html',
+                url: '/meiju22/new/Mlist/Mju13.html',
                 data: {
                     gutter: [24, 32],
                     PageId: 2,
@@ -157,7 +182,8 @@ class App extends React.Component {
             }, {
                 type: 'card',
                 description: '美剧悬疑烧脑',
-                url: '/hanjutv/v_all/list-catid-7-year-2017.html',
+                // url: 'https://www.meiju22.com/new/Mlist/Mju14.html',
+                url: '/meiju22/new/Mlist/Mju14.html',
                 data: {
                     gutter: [24, 32],
                     PageId: 2,
@@ -171,7 +197,8 @@ class App extends React.Component {
             }, {
                 type: 'card',
                 description: '美剧喜剧青春',
-                url: '/hanjutv/v_all/list-catid-7-year-2017.html',
+                // url: 'https://www.meiju22.com/new/Mlist/Mju15.html',
+                url: '/meiju22/new/Mlist/Mju15.html',
                 data: {
                     gutter: [24, 32],
                     PageId: 2,
@@ -185,7 +212,8 @@ class App extends React.Component {
             }, {
                 type: 'card',
                 description: '美剧动漫卡通',
-                url: '/hanjutv/v_all/list-catid-7-year-2017.html',
+                // url: 'https://www.meiju22.com/new/Mlist/Mju3.html',
+                url: '/meiju22/new/Mlist/Mju3.html',
                 data: {
                     gutter: [24, 32],
                     PageId: 2,
@@ -196,14 +224,28 @@ class App extends React.Component {
             }]
         }, 
         page3: {
+            id: 3,
             hasRenderer: !1,
             className: 'page hidden',
             children: [{
                 type: 'divider',
-                text: 'page-3'
+                text: '2020'
+            }, {
+                type: 'card',
+                description: '国语2020最新电视剧',
+                // url: 'http://www.wfrmyy.com/ttshow/13--2020.html',
+                url: '/wfrmyy/ttshow/13--2020.html',
+                data: {
+                    gutter: [24, 32],
+                    PageId: 3,
+                    RowId: 1,
+                    span: 4,
+                    value: []
+                }
             }]
         }, 
         page4: {
+            id: 4,
             hasRenderer: !1,
             className: 'page hidden',
             children: [{
@@ -212,6 +254,7 @@ class App extends React.Component {
             }]
         }, 
         page5: {
+            id: 5,
             hasRenderer: !1,
             className: 'page hidden',
             children: [{
@@ -220,6 +263,7 @@ class App extends React.Component {
             }]
         }, 
         page6: {
+            id: 6,
             hasRenderer: !1,
             className: 'page hidden',
             children: [{
@@ -239,19 +283,19 @@ class App extends React.Component {
         }
     }
 
-    createPage(page, i) {
+    createPage(page) {
         let children = page.children.map( child => this.createElement(child) );
         return (
-            <div id={ 'page-' + i } className={page.className}>
+            <div id={ 'page-' + page.id } className={page.className}>
                 { children }
             </div>
         )
     }
 
     getPages() {
-        let pages = [0, 1, 2, 3, 4, 5, 6].map( i => {
-            let page = this.state['page' + i];
-            return this.createPage(page, i);
+        let pages = Object.keys(this.state).map( key => {
+            let page = this.state[key];
+            return this.createPage(page);
         })
         return pages;
     }
