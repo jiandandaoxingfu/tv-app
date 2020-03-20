@@ -4,7 +4,6 @@ import { Row, Col } from 'antd';
 class ButtonRow extends React.Component {
     render() {
         let data = this.props.data;
-        
         return (
             <Row gutter={ data.gutter } id={ `page-${data.PageId}-row-${data.RowId}` }>
             { 

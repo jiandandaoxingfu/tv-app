@@ -50,7 +50,7 @@ body {
   left: 0; 
   right: 0;
   margin: auto;
-  transition: all .5s;
+  transition: all .3s;
 }
 .page.hidden {
   /*display: none;*/
@@ -133,4 +133,37 @@ body {
 .ant-divider {
   color: white !important;
   font-size: 30px !important;
+}
+
+/*
+  详情页
+*/
+.video-detail-container td {
+  position: relative;
+  top: -40px;
+  width: 400px;
+  padding: 8px;
+}
+.video-detail label {
+  color: white;
+  font-size: 30px;
+}
+.video-detail span {
+  color: yellow;
+  font-size: 27px;
+}
+.video-detail span#introduce {
+  font-size: 20px;
+}
+.video-detail div#video_name {
+  font-size: 30px;
+  color: red;
+  height: 35px;
+}
+
+#page-100 {
+   position: absolute;
+   top: 15px;
+   margin-top: 30px;
+   width: 90%;
 }

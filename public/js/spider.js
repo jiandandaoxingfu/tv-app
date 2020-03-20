@@ -7,7 +7,7 @@ var spider = {
 
 	hanjutv_format: function(data) {
 		let root_url = "https://www.hanjutv.com";
-		let list = data.replace(/(\r|\n|\r\n)/g, ' ').match( /<ul class="m-list".*?>(.*?)<\/ul>/)[1]
+		let list = data.replace(/(\r|\n|\r\n)/g, ' ').match( /<ul class="m-list.*?>(.*?)<\/ul>/)[1]
 			.match(/<li class="m-item">(.*?)<\/li>/g);
 		data = [];
 		list.forEach( li => {
@@ -41,7 +41,7 @@ var spider = {
 	}
 }
 
-spider.get_movie_list('http://192.168.1.4:3000/test.html').then( (res) => {
-	console.log( spider.tiantian_format(res.data) );
-	// console.log(res.data);
+spider.get_movie_list('https://www.hanjutv.com/v_all/list-catid-7-year-2016.html').then( res => {
+	// console.log([res.data.length, res.data])
+	console.log(res.data)
 })

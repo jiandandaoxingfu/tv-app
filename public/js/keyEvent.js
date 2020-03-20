@@ -18,9 +18,14 @@ document.addEventListener('keydown', e => {
         66:'KeyEnter',
         111:'KeyAlt'
     };
+
     e = e || window.event;
     var KeyCode = e.which || e.keyCode;
-    keyPress(KeyName[KeyCode]);
+    KeyName = KeyName[KeyCode];
+    if( KeyName === "KeyUp" || KeyName === "KeyDown" ) {
+        e.preventDefault();
+    }
+    keyPress(KeyName);
 });
 
 function keyPress(KeyName) {
@@ -73,10 +78,7 @@ var keyController = {
             changeClass.remove(this.ele, 'focus');
             changeClass.remove(this.ele, 'tab');
             changeClass.add(preEle, 'focus');
-            if( this.PageId == 0 ) {
-                preEle.click();
-                // changePage(this.eleId - 1);
-            }
+            if( this.PageId === 0 ) preEle.click();
         }
     },
 
@@ -124,12 +126,11 @@ var keyController = {
             // console.log('已经是最右边元素，不能向右');
         } else {
             let nextEle = selector.item(this.PageId, this.RowId, this.eleId + 1);
-            changeClass.remove(this.ele, 'focus');
-            changeClass.remove(this.ele, 'tab');
-            changeClass.add(nextEle, 'focus');
-            if( this.PageId == 0 ) {
-                nextEle.click();
-                // changePage(this.eleId + 1);
+            if( nextEle ) {
+                changeClass.remove(this.ele, 'focus');
+                changeClass.remove(this.ele, 'tab');
+                changeClass.add(nextEle, 'focus');
+                if( this.PageId === 0 ) nextEle.click();
             }
         }
     }, 
@@ -171,7 +172,7 @@ var keyController = {
     }, 
 
     keyEnter: function() {
-        
+        document.querySelector('.focus').click();
     }, 
 
     keyAlt: function() {

@@ -1,6 +1,6 @@
 var scroll = {
 	timeStamp: 15,
-	scrollTimes: 10,
+	scrollTimes: 1,
 
 	// 滚动页面，使焦点元素处在屏幕中央(竖直方向)
 	// ref: https://www.cnblogs.com/hjqbit/p/7260989.html

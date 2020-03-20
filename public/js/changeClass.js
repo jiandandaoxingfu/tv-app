@@ -8,6 +8,8 @@ var changeClass = {
 	}
 }
 
-window.onload = () => {
-	changeClass.add(document.querySelector('#page-0-row-1-btn-1'), 'focus');
+window.onload = function onload() {
+	let btn = document.querySelector('#page-0-row-1-btn-1'); 
+	changeClass.add(btn, 'focus');
+	btn.click();
 }
