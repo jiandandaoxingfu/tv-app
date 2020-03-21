@@ -1,7 +1,65 @@
 class Format {
-	hanjutv = function(data) {
+	constructor() {
+		this.regex = {
+			hanjutv: {
+				root_url: 'https://www.hanjutv.com',
+				list: {
+					ul: /<ul class="m-list.*?>(.*?)<\/ul>/,
+					li: /<li class="m-item">(.*?)<\/li>/g,
+					image_src: /data-original="(.*?)"/,
+					video_src: /href="(.*?)"/,
+					title: /title="(.*?)"/,
+					description: /<p class="des">(.*?)<\/p>/,
+				},
+				detail: {
+	
+				},
+				play: {
+	
+				}
+			},
+	
+			meiju22: {
+				root_url: 'https://www.meiju22.com',
+				list: {
+					ul: /<ul class="thumbnail-group clearfix">(.*?)<\/ul>/,
+					li: /<li>(.*?)<\/li>/g,
+					image_src: /data-original="(.*?)"/,
+					video_src: /href="(.*?)"/,
+					title: /title="(.*?)"/,
+					description: /<a href=".*?">(.*?)<\/a>/,
+				},
+				detail: {
+	
+				},
+				play: {
+	
+				}
+			},
+	
+			wfrmyy: {
+				root_url: 'http://www.wfrmyy.com',
+				list: {
+					ul: /<ul class="fed-list-info fed-part-rows">(.*?)<\/ul>/,
+					li: /<li class="fed-list-item.*?">(.*?)<\/li>/g,
+					image_src: /data-original="(.*?)"/,
+					video_src: /href="(.*?)"/,
+					title: /<a class="fed-list-title.*?>(.*?)<\/a>/,
+					description: /<span class="fed-list-desc.*?>(.*?)<\/span>/,
+				},
+				detail: {
+	
+				},
+				play: {
+	
+				}
+			}
+		}
+	}
+
+	hanjutv(data) {
 		let root_url = "https://www.hanjutv.com";
-		let list = data.replace(/(\r|\n|\r\n)/g, ' ').match( /<ul class="m-list.*?>(.*?)<\/ul>/)[1]
+		let list = data.replace(/(\r|\n|\r\n)/g, ' ').match(/<ul class="m-list.*?>(.*?)<\/ul>/)[1]
 			.match(/<li class="m-item">(.*?)<\/li>/g);
 		data = [];
 		list.forEach( li => {
@@ -19,7 +77,7 @@ class Format {
 		return data;
 	}
 
-	meiju22 = function(data) {
+	meiju22(data) {
 		let root_url = "https://www.meiju22.com";
 		let list = data.replace(/(\r|\n|\r\n)/g, ' ').match( /<ul class="thumbnail-group clearfix">(.*?)<\/ul>/)[1]
 			.match(/<li>(.*?)<\/li>/g);
@@ -39,7 +97,7 @@ class Format {
 		return data;
 	}
 
-	wfrmyy = function(data) {
+	wfrmyy(data) {
 		let root_url = "http://www.wfrmyy.com";
 		let list = data.replace(/(\r|\n|\r\n)/g, ' ').match( /<ul class="fed-list-info fed-part-rows">(.*?)<\/ul>/)[1]
 			.match(/<li class="fed-list-item.*?">(.*?)<\/li>/g);
@@ -58,7 +116,32 @@ class Format {
 		})
 		return data;
 	}
+
+	// hanjutv_deital(data) {
+	// 	data = data.replace(/(\r|\n|\r\n)/g, ' ');
+ //        let videoInfo = data.match(/<div class="intro clearfix">(.*?)<\/div>/)[1];
+ //        let introduce = data.match(/bdDesc".*?"(.*?)"/)[1];
+ //        videoInfo = videoInfo.split(/\/p>/).slice(1, 9).map(a => a.match(/\/label>(.*?)</)[1]);
+ //        videoInfo = {
+ //            date: videoInfo[0],
+ //            director: videoInfo[2],
+ //            role: videoInfo[3],
+ //            firstPlay: videoInfo[5],
+ //            update_time: videoInfo[6],
+ //            series: videoInfo[7],
+ //            introduce: introduce,
+ //            cover_url: document.getElementById(this.props.id).querySelector('img').src,
+ //            video_name: document.getElementById(this.props.id).querySelector('.ant-card-meta-title').innerText,
+ //        }
+ //        let playInfo = {series: ["返回"], url: []};
+ //        (data.match(/href="\/player.{1,30}">\d+(-\d+|)/g) || [])
+ //            .forEach(d => {
+ //                playInfo.url.push( d.match(/href="(.*?)"/)[1] );
+ //                playInfo.series.push( d.split('>')[1] );
+ //            })
+	// }
 }
 
 var format = new Format();
-export default format;
+// console.log(format.regex)
+// export default format;

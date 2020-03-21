@@ -9,13 +9,16 @@ class DetailPage extends React.Component {
         axios.get("https://www.hanjutv.com" + url).then(res => {
             let playUrl = res.data.match(/<iframe id="playPath.*?src="(.*?)"/)[1];
             eval(`
-                playView = plus.webview.create(${playUrl}, "playView");
+                let playView = plus.webview.create("http:${playUrl}", "playView");
                 playView.show();
             `)
         })
     }
 
     back2main() {
+        setTimeout( () => {
+            window.document.body.scrollTop = window.app.state.pageVideoDetail.scrollTop;
+        }, 100);
         eval(`
             changeClass.remove(document.querySelector('#page-100'), 'display');
             changeClass.add(document.querySelector('#page-100'), 'hidden');
@@ -25,11 +28,11 @@ class DetailPage extends React.Component {
             changeClass.add(document.querySelector('.blur'), 'focus');
             changeClass.remove(document.querySelector('.blur'), 'blur');
         `);
-        window.location.href = window.location.href.replace('#videoDetailPage', '');
+        // window.location.href = window.location.href.replace('#videoDetailPage', '');
     }
 
     click() {
-        let data = this.props.data;
+        let data = window.app.state.pageVideoDetail.data;
         let url = data.url;
         let text = document.querySelector('.focus').innerText;
         if( text === '返回' ) {
