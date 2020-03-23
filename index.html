@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title></title>
+	<script type="text/javascript" src="./js/keyEvent.js"></script>
+</head>
+<body>
+	<script type="text/javascript">
+		var mainView;
+		document.addEventListener('plusready', function() {
+			mainView = plus.webview.create("main.html", "mainView");
+			back2parent();
+		});
+		
+		
+		function back2parent() {
+			// Android处理返回键
+			plus.key.addEventListener('backbutton', function() {
+				let playView = plus.webview.getWebviewById("playView");
+				if( playView ) {
+					playView.close();
+				} else {
+					if( confirm("确定要退出吗？") ) {
+						plus.storage.clear();
+						plus.runtime.quit();
+					}
+				}
+			}, false);
+		};		
+	</script>
+</body>
+</html>

@@ -5,8 +5,8 @@ var scroll = {
 	// 滚动页面，使焦点元素处在屏幕中央(竖直方向)
 	// ref: https://www.cnblogs.com/hjqbit/p/7260989.html
 	scroll2middle: function(ele) { 
-		// var doc = document.documentElement;	// 电脑
-		var doc = document.body;			// 电视
+		var doc = document.documentElement;	// 电脑
+		// var doc = document.body;			// 电视
 		var s = doc.scrollTop; 				// 网页被卷去部分的高
         var h1 = window.innerHeight; 		// 文档可视区的高度
         var h2 = ele.clientHeight;			// 元素的高度
@@ -33,8 +33,8 @@ var scroll = {
 	smoothScroll: function(dist, count) {
 		if( count > 0 ) {
 			setTimeout( () => {
-				// document.documentElement.scrollTop += dist/this.scrollTimes; // 电脑
-				document.body.scrollTop += dist/this.scrollTimes; // 电视
+				document.documentElement.scrollTop += dist/this.scrollTimes; // 电脑
+				// document.body.scrollTop += dist/this.scrollTimes; // 电视
 				this.smoothScroll(dist,  --count);
 			}, this.timeStamp);
 		}
