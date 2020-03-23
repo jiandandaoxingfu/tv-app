@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title></title>
+	<script type="text/javascript" src="./js/keyEvent.js"></script>
+</head>
+<body>
+	<script type="text/javascript">
+		var indexView;
+		var mainView;
+		document.addEventListener('plusready', function() {
+			plus.navigator.setUserAgent( "User-Agent:Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.94 Safari/537.36" );
+
+			mainView = plus.webview.create("my-movie-app.html", 'mainView');
+			mainView.setCssFile("_www/css/index.css");
+			// mainView.appendJsFile("_www/js/clearADs.js");
+			// mainView.appendJsFile("_www/js/fullScreen.js");
+			// mainView.appendJsFile("_www/js/keyEvent.js");
+			// mainView.appendJsFile("_www/js/changeClass.js");
+			// mainView.appendJsFile("_www/js/back.js");
+			mainView.appendJsFile("_www/js/index.js");
+			mainView.show();
+
+			back2parent();
+		});
+		
+		
+		function back2parent() {
+			// Android处理返回键
+			plus.key.addEventListener('backbutton', function() {
+				console.log('index：返回键');
+				mainView.canBack( e => {
+					if( e.canBack ) {
+						console.log("index: 可以返回");
+						mainView.back();
+						mainView.evalJS(`
+							setTimeout( () => {
+								console.log("mainView: goback");
+								clearADs();
+							}, 1000)
+						`);
+					} else {
+						plus.storage.clear();
+            			plus.runtime.quit();
+					}
+				})
+			}, false);
+		};		
+	</script>
+</body>
+</html>
