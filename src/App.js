@@ -20,7 +20,7 @@ class App extends React.Component {
                         span: 4,
                         btnClass: 'header-btn',
                         onclick: this.requestData.bind(this),
-                        value: ['韩剧网', '美剧网', '国语电视剧', '最新电影', '待定', '待定']
+                        value: ['韩剧', '美剧', '国剧', '电影', '待定', '待定']
                     }
                 }]
             }, 
@@ -202,6 +202,20 @@ class App extends React.Component {
                 children: [{
                     type: 'divider',
                     text: 'page-4'
+                }, {
+                    hasRequest: !1,
+                    type: 'card',
+                    description: '2020最新电影',
+                    url: 'http://www.wfrmyy.com/ttshow/1--2020.html',
+                    // url: '/wfrmyy/ttshow/1--2020.html',
+                    data: {
+                        gutter: [24, 32],
+                        PageId: 4,
+                        RowId: 1,
+                        span: 4,
+                        value: [],
+                        cardCount: 6,
+                    }
                 }]
             }, 
             page5: {
@@ -271,11 +285,12 @@ class App extends React.Component {
         let child = page.children[n-i];
         if( child.type === 'card' && !child.hasRequest ) {
             child.hasRequest = !0;
-            // let site = child.url.split('/')[1];
-            let site = child.url.split('.')[1];
+            let site = child.url.split('/')[1];
+            // let site = child.url.split('.')[1];
+            console.log([n-i, child.url, '开始获取影视列表']);
             axios.get(child.url).then( res => {
-                console.log([n-i, child.url, 'success']);
-                child.data.value = format[site](res.data);
+                console.log([n-i, child.url, '成功获取影视列表']);
+                child.data.value = format.getMovieList(res.data, site);
                 let len = child.data.value.length;
                 len = len - len % (24 / child.data.span);
                 child.data.cardCount = len;
@@ -284,17 +299,16 @@ class App extends React.Component {
                 });
                 setTimeout( () => {
                     this.getData(page, pageId, i-1);
-                }, 500);
+                }, 1000);
             })
         } else {
             setTimeout( () => {
                 this.getData(page, pageId, i-1);
-            })
+            }, 1000)
         }
     }
 
     updateCard(PageId, childIndex) {
-        console.log('updateCard');
         let page = this.state[PageId];
         PageId = PageId.match(/\d+/)[0];
         let RowId = ( childIndex + 1 ) / 2;
@@ -312,7 +326,6 @@ class App extends React.Component {
             }
             eval(`
                 $(function() {
-                    console.log(1);
                     $("#page-${PageId}-row-${RowId} img").lazyload({effect: "fadeIn"});
                 });
             `)

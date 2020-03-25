@@ -33,35 +33,18 @@ class MyCard extends React.Component {
             let video_src = document.getElementById(this.props.id).getAttribute('name');
             // let matches = video_src.match(/www\.(\w+)\.com\/(.*)/);
             // let url = '/' + matches[1] + '/' + matches[2];
-            // let url = "https://www.hanjutv.com" + video_src;
+            // let site = matches[1];
+            let url = video_src;
+            let site = video_src.split('.')[1];
             // 获取详情页信息
-            axios.get(video_src).then( res => {
-                // let data = res.data.replace(/(\r|\n|\r\n)/g, ' ');
-                // let videoInfo = data.match(/<div class="intro clearfix">(.*?)<\/div>/)[1];
-                // let introduce = data.match(/bdDesc".*?"(.*?)"/)[1];
-                // videoInfo = videoInfo.split(/\/p>/).slice(1, 9).map(a => a.match(/\/label>(.*?)</)[1]);
-                // videoInfo = {
-                //     date: videoInfo[0],
-                //     director: videoInfo[2],
-                //     role: videoInfo[3],
-                //     firstPlay: videoInfo[5],
-                //     update_time: videoInfo[6],
-                //     series: videoInfo[7],
-                //     introduce: introduce,
-                //     cover_url: document.getElementById(this.props.id).querySelector('img').src,
-                //     video_name: document.getElementById(this.props.id).querySelector('.ant-card-meta-title').innerText,
-                // }
-                // let playInfo = {series: ["返回"], url: []};
-                // (data.match(/href="\/player.{1,30}">\d+(-\d+|)/g) || [])
-                //     .forEach(d => {
-                //         playInfo.url.push( d.match(/href="(.*?)"/)[1] );
-                //         playInfo.series.push( d.split('>')[1] );
-                //     })
-
-                // this.props.data.videoInfo = videoInfo;
-                // this.props.data.playInfo = playInfo;
-
-                [this.props.data.videoInfo, this.props.data.playInfo] = format[](res.data);
+            console.log([url, '开始获取影视详情'])
+            axios.get(url).then( res => {
+                console.log([url, '成功获取影视详情'])
+                let info = format.getMovieDetail(res.data, site);
+                this.props.data.videoInfo = info[0];
+                this.props.data.playInfo = info[1];
+                this.props.data.videoInfo.cover_url = document.getElementById(this.props.id).querySelector('img').src;
+                this.props.data.videoInfo.video_name = document.getElementById(this.props.id).querySelector('.ant-card-meta-title').innerText;
                 this.openDetailPage();
             })
         } else {

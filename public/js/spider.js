@@ -41,7 +41,7 @@ var spider = {
 	}
 }
 
-spider.get_movie_list('https://www.hanjutv.com/v_all/list-catid-7-year-2016.html').then( res => {
+spider.get_movie_list('https://www.meiju22.com/new/Meiju/M7662.html').then( res => {
 	// console.log([res.data.length, res.data])
 	console.log(res.data)
 })

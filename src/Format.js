@@ -12,10 +12,18 @@ class Format {
 					description: /<p class="des">(.*?)<\/p>/,
 				},
 				detail: {
-	
+					date: /年代.*?>(.*?)</,
+					introduce: /简介.*?>(.*?)</,
+					director: /导演.*?>(.*?)</,
+					role: /主演.*?>(.*?)</,
+					series: /集数.*?>(.*?)</,
+					firstPlay: /首播.*?>(.*?)</,
+					updateTime: /更新.*?>(.*?)</,
+					playList: /<ul class="juji-list clearfix.*?>(.*?)<\/ul>/,
 				},
 				play: {
-	
+					rootUrl: 'http:',
+					playUrl: /<iframe id="playPath.*?src="(.*?)"/,
 				}
 			},
 	
@@ -30,10 +38,18 @@ class Format {
 					description: /<a href=".*?">(.*?)<\/a>/,
 				},
 				detail: {
-	
+					date: /发行.*?年份.*?><a.*?>(.*?)<\/a>.*?<\/p/,
+					introduce: /剧情.*label>(.*?)<\/p/,
+					director: /导演.*?>(.*?)<\/p/,
+					role: /主演.*?>(.*?)<\/li/,
+					series: /共(\d+)集/,
+					firstPlay: /上映时间.*?<span.*?>(.*?)<\/span>/,
+					updateTime: /更新时间.*?>(.*?)</,
+					playList: /<ul class="detail-play-list.*?>(.*?)<\/ul>/,
 				},
 				play: {
-	
+					rootUrl: 'https://www.meiju22.com/ckplayerx/m3u8.php?url=',
+					playUrl: /cms_player = \{"yun":true,"url":"(.*?)"/,
 				}
 			},
 	
@@ -48,25 +64,34 @@ class Format {
 					description: /<span class="fed-list-desc.*?>(.*?)<\/span>/,
 				},
 				detail: {
-	
+					date: /年份：.*?>(.*?)<\/li>/,
+					introduce: /简介.*?>(.*?)</,
+					director: /导演：.*?>(.*?)<\/li>/,
+					role: /主演：.*?>(.*?)<\/li>/,
+					series: /集数.*?>(.*?)</,
+					firstPlay: /首播.*?>(.*?)</,
+					updateTime: /更新：.*?>(.*?)<\/li>/,
+					playList: /播放集数.*?<ul class="fed-part-rows">(.*?)<\/ul>/,
 				},
 				play: {
-	
+					rootUrl: 'http://www.wfrmyy.com/template/vfed/asset/fed/player.php?id=peer&url=',
+					playUrl: /<iframe.*?fed-play-iframe.*src=".*?url=(.*?)">/,
 				}
 			}
 		}
 	}
 
-	hanjutv(data) {
-		let root_url = "https://www.hanjutv.com";
-		let list = data.replace(/(\r|\n|\r\n)/g, ' ').match(/<ul class="m-list.*?>(.*?)<\/ul>/)[1]
-			.match(/<li class="m-item">(.*?)<\/li>/g);
+	getMovieList(data, domin) {
+		let regex = this.regex[domin].list;
+		let root_url = this.regex[domin].root_url;
+		let list = data.replace(/(\r|\n|\r\n)/g, ' ').match(regex.ul)[1]
+			.match(regex.li);
 		data = [];
 		list.forEach( li => {
-			let image_src = li.match(/data-original="(.*?)"/)[1];
-			let video_src = root_url + li.match(/href="(.*?)"/)[1];
-			let title = li.match(/title="(.*?)"/)[1];
-			let description = li.match(/<p class="des">(.*?)<\/p>/)[1];
+			let image_src = li.match(regex.image_src)[1];
+			let video_src = root_url + li.match(regex.video_src)[1];
+			let title = li.match(regex.title)[1];
+			let description = li.match(regex.description)[1];
 			data.push({
 				image_src: image_src, 
 				video_src: video_src, 
@@ -77,71 +102,33 @@ class Format {
 		return data;
 	}
 
-	meiju22(data) {
-		let root_url = "https://www.meiju22.com";
-		let list = data.replace(/(\r|\n|\r\n)/g, ' ').match( /<ul class="thumbnail-group clearfix">(.*?)<\/ul>/)[1]
-			.match(/<li>(.*?)<\/li>/g);
-		data = [];
-		list.forEach( li => {
-			let image_src = li.match(/data-original="(.*?)"/)[1];
-			let video_src = root_url + li.match(/href="(.*?)"/)[1];
-			let title = li.match(/title="(.*?)"/)[1];
-			let description = li.match(/<a href=".*?">(.*?)<\/a>/)[1];
-			data.push({
-				image_src: image_src, 
-				video_src: video_src, 
-				title: title, 
-				description: description
-			});
-		})
-		return data;
+	getMovieDetail(data, domin) {
+		data = data.replace(/(\r|\n|\r\n)/g, ' ');
+		let regex = this.regex[domin].detail;
+		let root_url = this.regex[domin].root_url;
+        let videoInfo = {};
+        Object.keys(regex).forEach( key => {
+        	let match = data.match(regex[key]);
+        	videoInfo[key] = match ? match[1].replace(/(<.*?>|&nbsp;)/g, ' ') : '';
+        })
+
+        let playInfo = {series: ["返回"], url: []};
+        let playList = data.match(regex.playList) || ['', ''];
+        ( playList[1].match(/<a .*?>.*?<\/a>/g) || [])
+            .forEach(d => {
+                playInfo.url.push( root_url + d.match(/href="(.*?)"/)[1] );
+                playInfo.series.push( d.match(/<a .*?>(.*?)<\/a/)[1].replace(/([\u4E00-\u9FA5]|HD|BD)/g, '') );
+            })
+        return [videoInfo, playInfo];
 	}
 
-	wfrmyy(data) {
-		let root_url = "http://www.wfrmyy.com";
-		let list = data.replace(/(\r|\n|\r\n)/g, ' ').match( /<ul class="fed-list-info fed-part-rows">(.*?)<\/ul>/)[1]
-			.match(/<li class="fed-list-item.*?">(.*?)<\/li>/g);
-		data = [];
-		list.forEach( li => {
-			let image_src = li.match(/data-original="(.*?)"/)[1];
-			let video_src = root_url + li.match(/href="(.*?)"/)[1];
-			let title = li.match(/<a class="fed-list-title.*?>(.*?)<\/a>/)[1];
-			let description = li.match(/<span class="fed-list-desc.*?>(.*?)<\/span>/)[1];
-			data.push({
-				image_src: image_src, 
-				video_src: video_src, 
-				title: title, 
-				description: description
-			});
-		})
-		return data;
+	getMoviePlayUrl(data, domin) {
+		data = data.replace(/(\r|\n|\r\n|\\)/g, '');
+		let regex = this.regex[domin].play;
+		let playUrl = regex.rootUrl + data.match( regex.playUrl )[1];
+		return playUrl;
 	}
-
-	// hanjutv_deital(data) {
-	// 	data = data.replace(/(\r|\n|\r\n)/g, ' ');
- //        let videoInfo = data.match(/<div class="intro clearfix">(.*?)<\/div>/)[1];
- //        let introduce = data.match(/bdDesc".*?"(.*?)"/)[1];
- //        videoInfo = videoInfo.split(/\/p>/).slice(1, 9).map(a => a.match(/\/label>(.*?)</)[1]);
- //        videoInfo = {
- //            date: videoInfo[0],
- //            director: videoInfo[2],
- //            role: videoInfo[3],
- //            firstPlay: videoInfo[5],
- //            update_time: videoInfo[6],
- //            series: videoInfo[7],
- //            introduce: introduce,
- //            cover_url: document.getElementById(this.props.id).querySelector('img').src,
- //            video_name: document.getElementById(this.props.id).querySelector('.ant-card-meta-title').innerText,
- //        }
- //        let playInfo = {series: ["返回"], url: []};
- //        (data.match(/href="\/player.{1,30}">\d+(-\d+|)/g) || [])
- //            .forEach(d => {
- //                playInfo.url.push( d.match(/href="(.*?)"/)[1] );
- //                playInfo.series.push( d.split('>')[1] );
- //            })
-	// }
 }
 
 var format = new Format();
-// console.log(format.regex)
-// export default format;
+export default format;

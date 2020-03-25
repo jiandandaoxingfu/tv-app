@@ -1,12 +1,14 @@
 var scroll = {
 	timeStamp: 15,
 	scrollTimes: 1,
+	isScroll: !0,
 
 	// 滚动页面，使焦点元素处在屏幕中央(竖直方向)
 	// ref: https://www.cnblogs.com/hjqbit/p/7260989.html
 	scroll2middle: function(ele) { 
-		// var doc = document.documentElement;	// 电脑
-		var doc = document.body;			// 电视
+		if( !this.isScroll ) return;
+		var doc = document.documentElement;	// 电脑
+		// var doc = document.body;			// 电视
 		var s = doc.scrollTop; 				// 网页被卷去部分的高
         var h1 = window.innerHeight; 		// 文档可视区的高度
         var h2 = ele.clientHeight;			// 元素的高度
@@ -15,9 +17,12 @@ var scroll = {
 		if( addScroll + s < 0 ) { // 下滑到头
 			addScroll = -doc.scrollTop;
 		} else if( addScroll > doc.scrollHeight - h1 ) { // 上滑到底
-			addScroll = doc.scrollHeight - h1 - doc.scrollTop;  // 前两个元素文档总高度与可视区域之差，即最大上滑距离
+			addScroll = doc.scrollHeight - h1 - doc.scrollTop;  // 前两个元素是文档总高度与可视区域之差，即最大上滑距离
 		}
-		this.smoothScroll(addScroll, this.scrollTimes);
+		if( addScroll !== 0 ) {
+			this.isScroll = !1;
+			this.smoothScroll(addScroll, this.scrollTimes);
+		}
 	},
 
 	getHeight: function(ele) { // 获取元素距离文档顶部的距离
@@ -33,10 +38,12 @@ var scroll = {
 	smoothScroll: function(dist, count) {
 		if( count > 0 ) {
 			setTimeout( () => {
-				// document.documentElement.scrollTop += dist/this.scrollTimes; // 电脑
-				document.body.scrollTop += dist/this.scrollTimes; // 电视
+				document.documentElement.scrollTop += dist/this.scrollTimes; // 电脑
+				// document.body.scrollTop += dist/this.scrollTimes; // 电视
 				this.smoothScroll(dist,  --count);
 			}, this.timeStamp);
+		} else {
+			this.isScroll = !0;
 		}
 	}
 }

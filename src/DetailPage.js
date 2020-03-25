@@ -3,14 +3,31 @@ import './App.css';
 import ButtonRow from './ButtonRow.js';
 import { Col, Row, Card } from 'antd';
 import axios from 'axios';
+import format from './Format.js';
 
 class DetailPage extends React.Component {
     playVideo(url) {
-        axios.get("https://www.hanjutv.com" + url).then(res => {
-            let playUrl = res.data.match(/<iframe id="playPath.*?src="(.*?)"/)[1];
+        let site = url.split('.')[1];
+        if( site === 'wfrmyy' ) {
+            console.log([url, '开始播放视频']);
             eval(`
-                let playView = plus.webview.create("http:${playUrl}", "playView");
-                playView.show();
+                let playView = plus.webview.create("${url}", "playView");
+                playView.setJsFile('_www/js/playPage.js');
+                setTimeout( () => {
+                    playView.show();
+                }, 2500 );
+            `)
+            return;
+        }
+        console.log([url, '开始获取视频地址']);
+        axios.get(url).then(res => {
+            console.log([url, '开始播放视频']);
+            url = format.getMoviePlayUrl(res.data, site);
+            eval(`
+                let playView = plus.webview.create("${url}", "playView");
+                setTimeout( () => {
+                    playView.show();
+                }, 300 );
             `)
         })
     }
@@ -28,7 +45,6 @@ class DetailPage extends React.Component {
             changeClass.add(document.querySelector('.blur'), 'focus');
             changeClass.remove(document.querySelector('.blur'), 'blur');
         `);
-        // window.location.href = window.location.href.replace('#videoDetailPage', '');
     }
 
     click() {
@@ -62,7 +78,7 @@ class DetailPage extends React.Component {
                                     </tr>
                                     <tr className="video-detail">
                                         <td><label>年代：</label><span id="year">{ info.date }</span></td>
-                                        <td><label>导演：</label><span id="director">{ info.director }</span></td>
+                                        <td><label>导演：</label><span id="director">{ info.director.slice(0, 20) }</span></td>
                                     </tr>
                                     <tr className="video-detail">
                                         <td><label>首播：</label><span id="firstPlay">{ info.firstPlay }</span></td>
@@ -70,10 +86,10 @@ class DetailPage extends React.Component {
                                     </tr>
                                     
                                     <tr className="video-detail">
-                                        <td colSpan="2"><label>更新：</label><span id="update-time">{ info.update_time }</span></td>
+                                        <td colSpan="2"><label>更新：</label><span id="update-time">{ info.updateTime }</span></td>
                                     </tr>
                                     <tr className="video-detail">
-                                        <td colSpan="2"><label>主演：</label><span id="role">{ info.role }</span></td>
+                                        <td colSpan="2"><label>主演：</label><span id="role">{ info.role.slice(0, 20) }</span></td>
                                     </tr>
                                     <tr className="video-detail">
                                         <td colSpan="2"><label>剧情：</label><span id="introduce">{info.introduce}</span></td>
